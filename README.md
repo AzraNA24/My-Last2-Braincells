@@ -10,14 +10,25 @@
 <img src="https://img.shields.io/badge/LibGDX-DD0000?style=for-the-badge&logo=libgdx&logoColor=white" />
 <img src="https://img.shields.io/badge/NEON-00FFFF?style=for-the-badge&logo=neon&logoColor=black" />
 </p>
+ 
+### This Final Exam will decide your fate, but wait! Why can't you remember anything you learnt? Where's all your Einstein braincells? Well it's fine, cause you still have two braincells left that will do anything to put answer on your paper. Of course you can't trust the answer they got.. right?
 
-## [ABOUT]
+My Last Two Braincells is a platform-puzzle game where you take control of your choosen brain cell during a high-stakes exam. Each brain cell has its own unique ability, and so they must revive your dormant brain and kickstart the bullshit generator machine just in time to answer that final question.
+
+With a mix of humor, clever mechanics, and puzzle-based challenges, this game is a lighthearted yet mentally stimulating journey through the chaos of an overworked mind.
 
 ## Fitur Utama
 
-- 
+- **Unique Character**  
+Meet lovable dingus that you can costumize!
+- **Character-Based Mechanics**  
+Each Braincells have its own way to solve levels.
+- **Mind-Bending Puzzles**  
+Use logic, timing, and creativity to overcome challenging platform and logic-based levels.
+- **Be Competitive!**  
+Beat your own time
 
-## Screenshot/GIF 
+## Sneak Peak
 
 ![Demo Aplikasi](screenshot/demo.gif)
 
@@ -34,6 +45,7 @@
 - [x] Initiate Frontend
 - [x] Working Backend
 - [x] Backend Done
+- [ ] Configure Multi Platform Display
 - [ ] Front page, login/sign up, up to levels visual
 - [ ] Character Movement, Enemy, platforms
 - [ ] Scene, levels, platforming
