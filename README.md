@@ -1,5 +1,7 @@
 # My Last Two Braincells
-<img align="center"> ![Title](https://hackmd.io/_uploads/HJS3074Xex.png) <img>
+<p align="center">
+  <img src="https://hackmd.io/_uploads/HJS3074Xex.png" alt="Title" width="400"/>
+</p>
 
 <p align="center">
 <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
@@ -31,7 +33,7 @@
 - [x] Initiate Backend
 - [x] Initiate Frontend
 - [x] Working Backend
-- [ ] Backend Done
+- [x] Backend Done
 - [ ] Front page, login/sign up, up to levels visual
 - [ ] Character Movement, Enemy, platforms
 - [ ] Scene, levels, platforming
