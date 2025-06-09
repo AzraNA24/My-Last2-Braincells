@@ -25,8 +25,8 @@ Meet lovable dingus that you can costumize!
 Each Braincells have its own way to solve levels.
 - **Mind-Bending Puzzles**  
 Use logic, timing, and creativity to overcome challenging platform and logic-based levels.
-- **Be Competitive!**  
-Beat your own time
+- **Multiple Platforms**  
+Play anywhere, anytime
 
 ## Sneak Peak
 
