@@ -1,13 +1,15 @@
 # My Last Two Braincells
-![Title](https://hackmd.io/_uploads/HJS3074Xex.png)
+<img align="center"> ![Title](https://hackmd.io/_uploads/HJS3074Xex.png) <img>
 
+<p align="center">
 <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
 <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" />
 <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
 <img src="https://img.shields.io/badge/LibGDX-DD0000?style=for-the-badge&logo=libgdx&logoColor=white" />
 <img src="https://img.shields.io/badge/NEON-00FFFF?style=for-the-badge&logo=neon&logoColor=black" />
+</p>
 
-[ABOUT]
+## [ABOUT]
 
 ## Fitur Utama
 
