@@ -1,11 +1,11 @@
 # My Last Two Braincells
 ![Title](https://hackmd.io/_uploads/HJS3074Xex.png)
 
-[![Java](https://img.shields.io/badge/Java-17+-blue?logo=java)](https://java.com)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.5-green?logo=spring)](https://spring.io/projects/spring-boot)
-[![LibGDX](https://img.shields.io/badge/LibGDX-1.11.0-red)](https://libgdx.com)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql)](https://postgresql.org)
-<img src="https://img.shields.io/badge/Neon-0A0A23?style=for-the-badge&logo=neon&logoColor=00F7FF" />
+<img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
+<img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" />
+<img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
+<img src="https://img.shields.io/badge/LibGDX-DD0000?style=for-the-badge&logo=libgdx&logoColor=white" />
+<img src="https://img.shields.io/badge/NEON-00FFFF?style=for-the-badge&logo=neon&logoColor=black" />
 
 [ABOUT]
 
