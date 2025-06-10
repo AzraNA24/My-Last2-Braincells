@@ -48,4 +48,17 @@ public class UserController {
         userRepository.save(newUser);
         return new BaseResponse<>(true, "User registered successfully", newUser);
     }
+    @PostMapping("/login")
+    public BaseResponse<User> loginUser(@RequestParam String username,
+                                        @RequestParam String password) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return new BaseResponse<>(false, "User not found", null);
+        }
+        if (!user.getPassword().equals(password)) {
+            return new BaseResponse<>(false, "Incorrect password", null);
+        }
+
+        return new BaseResponse<>(true, "Login successful", user);
+    }
 }
