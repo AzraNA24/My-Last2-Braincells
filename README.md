@@ -45,7 +45,7 @@ Play anywhere, anytime
 - [x] Initiate Frontend
 - [x] Working Backend
 - [x] Backend Done
-- [ ] Configure Multi Platform Display
+- [x] Configure Multi Platform Display
 - [ ] Front page, login/sign up, up to levels visual
 - [ ] Character Movement, Enemy, platforms
 - [ ] Scene, levels, platforming
