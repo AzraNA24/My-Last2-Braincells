@@ -11,7 +11,7 @@
 <img src="https://img.shields.io/badge/NEON-00FFFF?style=for-the-badge&logo=neon&logoColor=black" />
 </p>
  
-### This Final Exam will decide your fate, but wait! Why can't you remember anything you learnt? Where's all your Einstein braincells? Well it's fine, cause you still have two braincells left that will do anything to put answer on your paper. Of course you can't trust the answer they got.. right?
+### This Final Exam will decide your fate, but wait! Why can't you remember anything you learnt? Where's all your Einstein braincells? Well it's fine, cause you still have two braincells left that will do anything to put answer on your paper. Of course you can trust the answer they got.. right?
 
 My Last Two Braincells is a platform-puzzle game where you take control of your choosen brain cell during a high-stakes exam. Each brain cell has its own unique ability, and so they must revive your dormant brain and kickstart the bullshit generator machine just in time to answer that final question.
 
