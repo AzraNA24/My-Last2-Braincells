@@ -29,7 +29,7 @@ Use logic, timing, and creativity to overcome challenging platform and logic-bas
 Play anywhere, anytime
 
 ## Sneak Peak
-
+![Phone](https://hackmd.io/_uploads/HynVxWuXll.png)
 ![Demo Aplikasi](screenshot/demo.gif)
 
 ## Teknologi yang Digunakan
