@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d72253ee6fa6f344da55e59904d95c22, type: 3}
+  m_Name: CharacterCustomization
+  m_EditorClassIdentifier: 
+  customizationTypes:
+  - typeId: 3
+    typeName: color
+    options:
+    - optionId: 0
+      animatorController: {fileID: 9100000, guid: 2b037cc4d0094bd44bb14f1b600000f1, type: 2}
+      previewSprite: {fileID: 1957729803, guid: 188c1cc72b4ee7c4995e54782f75cf33, type: 3}
+    - optionId: 1
+      animatorController: {fileID: 9100000, guid: 2b037cc4d0094bd44bb14f1b600000f1, type: 2}
+      previewSprite: {fileID: 1245438909, guid: 188c1cc72b4ee7c4995e54782f75cf33, type: 3}
+    - optionId: 3
+      animatorController: {fileID: 9100000, guid: 2b037cc4d0094bd44bb14f1b600000f1, type: 2}
+      previewSprite: {fileID: -1487550583, guid: 188c1cc72b4ee7c4995e54782f75cf33, type: 3}
+    - optionId: 4
+      animatorController: {fileID: 9100000, guid: 2b037cc4d0094bd44bb14f1b600000f1, type: 2}
+      previewSprite: {fileID: -1832964009, guid: 188c1cc72b4ee7c4995e54782f75cf33, type: 3}
+    - optionId: 5
+      animatorController: {fileID: 9100000, guid: 2b037cc4d0094bd44bb14f1b600000f1, type: 2}
+      previewSprite: {fileID: -2017551983, guid: 188c1cc72b4ee7c4995e54782f75cf33, type: 3}
+  - typeId: 3
+    typeName: color
+    options:
+    - optionId: 0
+      animatorController: {fileID: 9100000, guid: 9dae45e9eab7b7d43a4ea872360a4841, type: 2}
+      previewSprite: {fileID: 1485512745, guid: 6e8983844ecda45459f264db1e20d8f0, type: 3}
+    - optionId: 1
+      animatorController: {fileID: 9100000, guid: 5226e240fd99f1d498af97d40d61e06f, type: 2}
+      previewSprite: {fileID: 1335488225, guid: 6e8983844ecda45459f264db1e20d8f0, type: 3}
+    - optionId: 3
+      animatorController: {fileID: 9100000, guid: 0fcf0ba5b7fa5064a84d99f73251b24f, type: 2}
+      previewSprite: {fileID: 51158830, guid: 6e8983844ecda45459f264db1e20d8f0, type: 3}
+    - optionId: 4
+      animatorController: {fileID: 9100000, guid: bcd1774ff309e944a878fc7689e151ab, type: 2}
+      previewSprite: {fileID: -1211383184, guid: 6e8983844ecda45459f264db1e20d8f0, type: 3}
+    - optionId: 5
+      animatorController: {fileID: 9100000, guid: 5822d657b2f68e64e89319d4e22b8e5c, type: 2}
+      previewSprite: {fileID: -1650157767, guid: 6e8983844ecda45459f264db1e20d8f0, type: 3}

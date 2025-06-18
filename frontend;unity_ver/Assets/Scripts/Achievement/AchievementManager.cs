@@ -7,140 +7,132 @@ using TMPro;
 
 public class AchievementManager : MonoBehaviour
 {
-    [Header("API Configuration")]
-    [SerializeField] private string allAchievementsUrl = "https://my-last2-braincells-backend-production-c9ac.up.railway.app/api/achievements/";
-    [SerializeField] private float apiTimeout = 10f;
-    [SerializeField] private int maxRetries = 3;
-
-    [Header("UI Elements")]
-    [SerializeField] private GameObject achievementPrefab;
     [SerializeField] private Transform achievementContainer;
-    [SerializeField] private Sprite lockedSprite;
+    [SerializeField] private GameObject achievementPrefab;
+    [SerializeField] private Color unlockedColor = Color.white;
+    [SerializeField] private Color lockedColor = Color.gray;
 
-    private List<Achievement> allAchievements = new List<Achievement>();
-    private int currentRetryCount = 0;
+    private string userId;
 
     private void Start()
     {
-        StartCoroutine(LoadAchievementsWithRetry());
-    }
-
-    private IEnumerator LoadAchievementsWithRetry()
-    {
-        while (currentRetryCount < maxRetries)
+        userId = PlayerPrefs.GetString("userId");
+        Debug.Log("Attempting to load achievements for user: " + userId);
+        if (!string.IsNullOrEmpty(userId))
         {
-            yield return StartCoroutine(LoadAllAchievements());
-            
-            if (allAchievements.Count > 0)
-            {
-                // Success, break the retry loop
-                break;
-            }
-            
-            currentRetryCount++;
-            Debug.LogWarning($"Retry attempt {currentRetryCount}/{maxRetries}");
-            yield return new WaitForSeconds(2f); // Wait before retry
+            StartCoroutine(LoadAchievements());
+        }
+        else
+        {
+            Debug.LogError("User ID not found. Please login first.");
         }
     }
 
-    private IEnumerator LoadAllAchievements()
+    IEnumerator LoadAchievements()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(allAchievementsUrl))
-        {
-            request.timeout = (int)apiTimeout;
-            
-            yield return request.SendWebRequest();
+        string allAchievementsUrl = "https://my-last2-braincells-backend-production-c9ac.up.railway.app/api/achievements/";
+        string userAchievementsUrl = $"https://my-last2-braincells-backend-production-c9ac.up.railway.app/api/achievements/user/{userId}";
 
-            if (request.result == UnityWebRequest.Result.Success)
+        // Get all available achievements
+        Debug.Log("Loading all achievements from: " + allAchievementsUrl);
+        using (UnityWebRequest allAchievementsRequest = UnityWebRequest.Get(allAchievementsUrl))
+        {
+            yield return allAchievementsRequest.SendWebRequest();
+            Debug.Log("Response Text: " + allAchievementsRequest.downloadHandler.text);
+
+            if (allAchievementsRequest.result == UnityWebRequest.Result.Success)
             {
-                string jsonResponse = request.downloadHandler.text;
-                Debug.Log("Achievements API Response: " + jsonResponse);
-                
-                try
+                AchievementResponse achievementResponse = JsonUtility.FromJson<AchievementResponse>(allAchievementsRequest.downloadHandler.text);
+
+                // Get user's unlocked achievements
+                using (UnityWebRequest userAchievementsRequest = UnityWebRequest.Get(userAchievementsUrl))
                 {
-                    ApiResponse<Achievement> response = JsonUtility.FromJson<ApiResponse<Achievement>>(jsonResponse);
-                    
-                    if (response != null && response.success && response.payload != null)
+                    yield return userAchievementsRequest.SendWebRequest();
+                    Debug.Log("Response Text: " + userAchievementsRequest.downloadHandler.text);
+
+                    if (userAchievementsRequest.result == UnityWebRequest.Result.Success)
                     {
-                        allAchievements = new List<Achievement>(response.payload);
-                        Debug.Log($"Successfully loaded {allAchievements.Count} achievements");
-                        DisplayAchievements();
+                        UserAchievementResponse userAchievementResponse = JsonUtility.FromJson<UserAchievementResponse>(userAchievementsRequest.downloadHandler.text);
+                        DisplayAchievements(achievementResponse.payload, userAchievementResponse.payload);
                     }
                     else
                     {
-                        Debug.LogError("Invalid API response format");
+                        Debug.LogError("Failed to load achievements: " + allAchievementsRequest.error);
+                        Debug.LogError("Full error response: " + allAchievementsRequest.downloadHandler.text);
                     }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError("JSON parse error: " + e.Message);
                 }
             }
             else
             {
-                HandleNetworkError(request, "achievements");
+                Debug.LogError("Failed to load achievements: " + allAchievementsRequest.error);
             }
         }
     }
 
-    private void HandleNetworkError(UnityWebRequest request, string context)
+    void DisplayAchievements(Achievement[] allAchievements, UserAchievement[] userAchievements)
     {
-        string errorMessage = $"Error fetching {context}: ";
-        
-        switch (request.result)
+        // Null checks
+        if (achievementContainer == null)
         {
-            case UnityWebRequest.Result.ConnectionError:
-                errorMessage += "Connection error";
-                break;
-            case UnityWebRequest.Result.ProtocolError:
-                errorMessage += $"HTTP {request.responseCode}";
-                break;
-            case UnityWebRequest.Result.DataProcessingError:
-                errorMessage += "Data processing error";
-                break;
-            default:
-                errorMessage += "Unknown error";
-                break;
+            Debug.LogError("Achievement Container not assigned in inspector!");
+            return;
         }
-        
-        errorMessage += $"\n{request.error}";
-        Debug.LogError(errorMessage);
-    }
 
-    private void DisplayAchievements()
-    {
-        // Clear existing achievements
+        if (achievementPrefab == null)
+        {
+            Debug.LogError("Achievement Prefab not assigned in inspector!");
+            return;
+        }
+
+        if (allAchievements == null)
+        {
+            Debug.LogError("Received null achievements array");
+            return;
+        }
+
+        // Clear existing items
         foreach (Transform child in achievementContainer)
         {
             Destroy(child.gameObject);
         }
 
-        // Create achievement items
+        List<int> unlockedIds = new List<int>();
+        if (userAchievements != null)
+        {
+            foreach (var ua in userAchievements)
+            {
+                if (ua?.achievement != null)
+                    unlockedIds.Add(ua.achievement.id);
+            }
+        }
+
+        achievementContainer.gameObject.SetActive(true);
+        // Instantiate achievements
         foreach (var achievement in allAchievements)
         {
-            GameObject achievementItem = Instantiate(achievementPrefab, achievementContainer);
-            AchievementItem itemScript = achievementItem.GetComponent<AchievementItem>();
+            if (achievement == null) continue;
             
-            // Load sprite from Resources
-            
-            // For this simplified version, we'll just show all achievements as unlocked
-            // or you can add some other logic to determine if they should be shown as locked
-            bool showAsUnlocked = true; // Change this if you have different display logic
-            
-            itemScript.Setup(               
-                achievement.name,
-                achievement.description,
-                showAsUnlocked ? "Unlocked" : "Locked",
-                showAsUnlocked
-            );
+            try 
+            {
+                GameObject obj = Instantiate(achievementPrefab, achievementContainer);
+                Debug.Log($"Instantiated achievement: {achievement.name}", obj);
+                AchievementItem item = obj.GetComponent<AchievementItem>();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(achievementContainer.GetComponent<RectTransform>());
+                
+                if (item != null)
+                {
+                    bool isUnlocked = unlockedIds.Contains(achievement.id);
+                    item.Setup(achievement, isUnlocked, unlockedColor, lockedColor);
+                }
+                else
+                {
+                    Debug.LogError("Prefab missing AchievementItem component");
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error instantiating achievement: {e.Message}");
+            }
         }
     }
-}
-
-[System.Serializable]
-public class ApiResponse<T>
-{
-    public bool success;
-    public string message;
-    public T[] payload;
 }

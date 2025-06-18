@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 8025363171775549047}
   - component: {fileID: 4660755156598553934}
   - component: {fileID: 1721563989296009582}
+  - component: {fileID: 9184114986283337787}
   m_Layer: 0
   m_Name: MusangKing
   m_TagString: Untagged
@@ -268,7 +269,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2719931995837077979}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -287,3 +288,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &9184114986283337787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2719931995837077979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0bac4b6b6eee8540b129c022a228bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointA: {fileID: 0}
+  pointB: {fileID: 0}
+  moveSpeed: 2
+  chaseSpeed: 3
+  detectionRadius: 1.2
+  waypointThreshold: 0.1
+  blinkDuration: 1
+  blinkCount: 4
+  blinkColor: {r: 0.7735849, g: 0.27489018, b: 0.27489018, a: 0.85490197}
+  possessSpawnPoint: {fileID: 0}

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8462463501490093259}
   - component: {fileID: 2486767842335150057}
   - component: {fileID: 3021234184959907241}
-  - component: {fileID: 6722278936147818068}
-  m_Layer: 6
+  - component: {fileID: 19954289546248715}
+  m_Layer: 9
   m_Name: FlyOver
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4b662c465e4da0f47b75b70e18f08505, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6458742780a61754d80192b5a2c6d98e, type: 3}
   m_Color: {r: 0.749021, g: 0.77750087, b: 0.9056604, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1.59, y: 3.18}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -124,7 +124,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.59, y: 3.18}
-    newSize: {x: 0.16, y: 0.16}
+    newSize: {x: 1.59, y: 3.18}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -151,7 +151,7 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
---- !u!114 &6722278936147818068
+--- !u!114 &19954289546248715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 202021815639019381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16bdfbb11a528c458368663dbb2b962, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c7139cb88544cf47a96ae281ca9ef22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pointA: {fileID: 5740724688355751367}

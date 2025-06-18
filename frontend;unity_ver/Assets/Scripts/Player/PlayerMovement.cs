@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Data.Common;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -34,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     float WallJumpDirec;
     float WallJumpTime = 0.5f;
     float WallJumpTimer;
-    public Vector2 wallJumpPower = new Vector2 (5f, 10f);
+    public Vector2 wallJumpPower = new Vector2(5f, 10f);
 
     [Header("Dash")]
     public float dashSpeed = 20f;
@@ -44,33 +42,125 @@ public class PlayerMovement : MonoBehaviour
     bool canDash = true;
     TrailRenderer tr;
 
+    [Header("Inactivity Settings")]
+    [SerializeField] private float inactivityTimeLimit = 3f;
+    [SerializeField] private Slider inactivitySlider;
+    private float inactivityTimer;
+    private Vector3 spawnPoint;
+    private Vector2 lastPosition;
+    private bool wasMoving;
+
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     float horizontalInput;
     bool faceRight = true;
-    float offsetValue = 0.75f;
-    
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+        spawnPoint = transform.position;
+        lastPosition = rb.position;
     }
 
     public void Start()
     {
         tr = GetComponent<TrailRenderer>();
+        ResetInactivityTimer();
     }
+
     private void Update()
     {
+        CheckMovement();
+        horizontalInput = Input.GetAxisRaw("Horizontal");
         isGround();
         Gravity();
         WallSlide();
         WallJump();
-        if(!isWallJump){
+        
+        // Handle jump input in Update
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TryJump();
+        }
+
+        if (!isWallJump)
+        {
             rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
             Flip();
         }
+    }
+
+    private void TryJump()
+    {
+        if (jumpRemain > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpRemain--;
+        }
+        else if (WallJumpTimer > 0)
+        {
+            isWallJump = true;
+            rb.velocity = new Vector2(WallJumpDirec * wallJumpPower.x, wallJumpPower.y);
+            WallJumpTimer = 0;
+
+            if (transform.localScale.x != WallJumpDirec)
+            {
+                Flip();
+            }
+
+            Invoke(nameof(CancelWallJump), WallJumpTime + 0.1f);
+        }
+    }
+
+    private void CheckMovement()
+    {
+        bool isMoving = rb.position != lastPosition || 
+                       horizontalInput != 0 || 
+                       Input.GetKey(KeyCode.Space) || 
+                       isDashing;
+
+        if (isMoving)
+        {
+            ResetInactivityTimer();
+            wasMoving = true;
+        }
+        else if (wasMoving)
+        {
+            inactivityTimer += Time.deltaTime;
+            
+            if (inactivityTimer >= inactivityTimeLimit)
+            {
+                DieFromInactivity();
+            }
+        }
+
+        lastPosition = rb.position;
+    }
+
+    private void ResetInactivityTimer()
+    {
+        inactivityTimer = 0f;
+    }
+
+    private void UpdateInactivityUI() 
+    {
+        if (inactivitySlider != null)
+        {
+            inactivitySlider.value = inactivityTimer / inactivityTimeLimit;
+        }
+    }
+
+    private void DieFromInactivity()
+    {
+        transform.position = spawnPoint;
+        rb.velocity = Vector2.zero;
+        isWallJump = false;
+        isDashing = false;
+        canDash = true;
+        ResetInactivityTimer();
+        wasMoving = false;
+        Debug.Log("Player died from inactivity!");
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -80,43 +170,32 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if(jumpRemain > 0){
-            if(context.performed){
-                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-                jumpRemain--;
-            }
-            else if(context.canceled){
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-                jumpRemain--;
-            }
+        if (context.performed)
+        {
+            TryJump();
         }
-        
-        if(context.performed && WallJumpTimer > 0){
-            isWallJump = true;
-            rb.velocity = new Vector2(WallJumpDirec * wallJumpPower.x, wallJumpPower.y);
-            WallJumpTimer = 0;
-            
-            if(transform.localScale.x != WallJumpDirec){
-                Flip();
-            }
-
-            Invoke(nameof(CancelWallJump), WallJumpTime +0.1f);
+        else if (context.canceled && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
     }
+
     private void isGround()
     {
-        if(Physics2D.OverlapBox(groundChecker.position,groundSizeChecker, 0.5f, groundLayer)){
-            jumpRemain =  maxJump;
+        if (Physics2D.OverlapBox(groundChecker.position, groundSizeChecker, 0.5f, groundLayer))
+        {
+            jumpRemain = maxJump;
             isGrounded = true;
         }
-        else{
+        else
+        {
             isGrounded = false;
         }
     }
     
     private bool isWall()
     {
-        return Physics2D.OverlapBox(wallChecker.position,wallSizeChecker, 0, wallLayer);
+        return Physics2D.OverlapBox(wallChecker.position, wallSizeChecker, 0, wallLayer);
     }
 
     void OnDrawGizmosSelected()
@@ -129,53 +208,52 @@ public class PlayerMovement : MonoBehaviour
 
     private void Flip()
     {
-        if(faceRight && horizontalInput < 0 || !faceRight && horizontalInput > 0){
+        if ((faceRight && horizontalInput < 0) || (!faceRight && horizontalInput > 0))
+        {
             faceRight = !faceRight;
-            Vector3 pos = transform.position;
             Vector3 ls = transform.localScale;
             ls.x *= -1;
             transform.localScale = ls;
-            if(!faceRight){
-                pos.x += 1.2f;
-            }
-            else{
-                pos.x -= 1.2f;
-            }
-            transform.position = pos;
         }
     }
+
     private void Gravity()
     {
-        if(rb.velocity.y < 0){
+        if (rb.velocity.y < 0)
+        {
             rb.gravityScale = baseGr * fallSpeedMux;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -maxFallSpeed));
         }
-        else{
+        else
+        {
             rb.gravityScale = baseGr;
         }
     }
 
     private void WallSlide()
     {
-        if(!isGrounded && isWall() && horizontalInput != 0){
+        if (!isGrounded && isWall() && horizontalInput != 0)
+        {
             isSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -slideSpeed));
         }
-        else{
+        else
+        {
             isSliding = false;
         }
     }
 
     private void WallJump()
     {
-        if(isSliding){
+        if (isSliding)
+        {
             isWallJump = false;
             WallJumpDirec = -transform.localScale.x;
             WallJumpTimer = WallJumpTime;
-
             CancelInvoke(nameof(CancelWallJump));
         }
-        else if(WallJumpTimer > 0f){
+        else if (WallJumpTimer > 0f)
+        {
             WallJumpTimer -= Time.deltaTime;
         }
     }
@@ -184,27 +262,28 @@ public class PlayerMovement : MonoBehaviour
     {
         isWallJump = false;
     }
+
     public void Dash(InputAction.CallbackContext context)
     {
-        if(context.performed && canDash){
+        if (context.performed && canDash)
+        {
             StartCoroutine(DashCoroutine());
         }
     }
-    private IEnumerator DashCoroutine(){
+
+    private IEnumerator DashCoroutine()
+    {
         canDash = false;
         isDashing = true;
         tr.emitting = true;
-        float dashDirection = faceRight ? 1.2f : -1.2f;  
+        float dashDirection = faceRight ? 1f : -1f;
 
-        rb.velocity = new Vector2(dashDuration *dashSpeed, rb.velocity.y);
+        rb.velocity = new Vector2(dashDirection * dashSpeed, 0f);
         yield return new WaitForSeconds(dashDuration);
 
-        rb.velocity = new Vector2(0f, rb.velocity.y);
-
-        isDashing = false;
         tr.emitting = false;
+        isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
-
     }
 }

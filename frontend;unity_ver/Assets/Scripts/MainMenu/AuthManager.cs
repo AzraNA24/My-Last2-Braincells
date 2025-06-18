@@ -3,13 +3,20 @@ using UnityEngine.Networking;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+
 public class AuthManager : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField usernameInput;
-    [SerializeField] private TMP_InputField emailInput;
-    [SerializeField] private TMP_InputField passwordInput;
+    // Register Fields
+    [SerializeField] private TMP_InputField regUsernameInput;
+    [SerializeField] private TMP_InputField regEmailInput;
+    [SerializeField] private TMP_InputField regPasswordInput;
+    
+    // Login Fields
+    [SerializeField] private TMP_InputField loginUsernameInput;
+    [SerializeField] private TMP_InputField loginPasswordInput;
+    
     [SerializeField] private GameObject loginPanel;
-    // [SerializeField] private Text feedbackText;
+    [SerializeField] private GameObject SignupPanel;
     [SerializeField] private Button startButton;
     [SerializeField] private Button achievementButton;
 
@@ -25,25 +32,32 @@ public class AuthManager : MonoBehaviour
         Debug.Log("Stored Token: " + PlayerPrefs.GetString("authToken"));
 
         sceneController = FindObjectOfType<SceneController>();
-
         UpdateButtonInteractability();
+        
         if (PlayerPrefs.HasKey("authToken"))
         {
+            SignupPanel.SetActive(false);
             loginPanel.SetActive(false);
         }
     }
+
     public void OnRegisterButtonClicked()
     {
         StartCoroutine(RegisterAndLogin());
     }
 
+    public void OnLoginButtonClicked()
+    {
+        StartCoroutine(Login());
+    }
+
     IEnumerator RegisterAndLogin()
     {
-        // 1. Register
+        // Register menggunakan input field register
         WWWForm form = new WWWForm();
-        form.AddField("username", usernameInput.text);
-        form.AddField("email", emailInput.text);
-        form.AddField("password", passwordInput.text);
+        form.AddField("username", regUsernameInput.text);
+        form.AddField("email", regEmailInput.text);
+        form.AddField("password", regPasswordInput.text);
 
         using (UnityWebRequest request = UnityWebRequest.Post(RegisterUrl, form))
         {
@@ -53,10 +67,8 @@ public class AuthManager : MonoBehaviour
             {
                 Debug.Log("Register berhasil! Mencoba login...");
                 Debug.Log("Register Response: " + request.downloadHandler.text);
-                yield return new WaitForSeconds(1);
-
-                // 2. Auto-Login setelah register berhasil
-                yield return StartCoroutine(LoginAfterRegister());
+                
+                yield return StartCoroutine(Login(regUsernameInput.text, regPasswordInput.text));
             }
             else
             {
@@ -65,11 +77,12 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    IEnumerator LoginAfterRegister()
+    // Overload untuk login setelah register
+    IEnumerator Login(string username, string password)
     {
         WWWForm form = new WWWForm();
-        form.AddField("username", usernameInput.text);
-        form.AddField("password", passwordInput.text);
+        form.AddField("username", username);
+        form.AddField("password", password);
 
         using (UnityWebRequest request = UnityWebRequest.Post(LoginUrl, form))
         {
@@ -77,33 +90,7 @@ public class AuthManager : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                string jsonResponse = request.downloadHandler.text;
-                Debug.Log("Login Response: " + jsonResponse);
-                Debug.Log("Login berhasil!");
-                try
-                {
-                    var response = JsonUtility.FromJson<LoginResponse>(jsonResponse);
-                    
-                    if (response != null && response.user != null)
-                    {
-                        PlayerPrefs.SetString("authToken", response.token);
-                        PlayerPrefs.SetString("userId", response.user.id.ToString());
-                        Debug.Log("Login success! UserId: " + response.user.id);
-                    }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError("JSON Parse Error: " + e.Message);
-                }
-
-                PlayerPrefs.Save();
-                loginPanel.SetActive(false);
-                UpdateButtonInteractability();
-
-                if (sceneController != null)
-                {
-                    sceneController.OnLoginSuccess();
-                }
+                ProcessLoginResponse(request.downloadHandler.text);
             }
             else
             {
@@ -112,6 +99,55 @@ public class AuthManager : MonoBehaviour
         }
     }
 
+    IEnumerator Login()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", loginUsernameInput.text);
+        form.AddField("password", loginPasswordInput.text);
+
+        using (UnityWebRequest request = UnityWebRequest.Post(LoginUrl, form))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                ProcessLoginResponse(request.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log("Login gagal: " + request.error);
+            }
+        }
+    }
+
+    private void ProcessLoginResponse(string jsonResponse)
+    {
+        Debug.Log("Login Response: " + jsonResponse);
+        try
+        {
+            var response = JsonUtility.FromJson<LoginResponse>(jsonResponse);
+            
+            if (response != null && response.success)
+            {
+                PlayerPrefs.SetString("userId", response.payload.id.ToString());
+                Debug.Log("Login success! UserId: " + response.payload.id);
+                
+                PlayerPrefs.Save();
+                loginPanel.SetActive(false);
+                SignupPanel.SetActive(false);
+                UpdateButtonInteractability();
+
+                if (sceneController != null)
+                {
+                    sceneController.OnLoginSuccess();
+                }
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("JSON Parse Error: " + e.Message);
+        }
+    }
     
     private void UpdateButtonInteractability()
     {
@@ -121,25 +157,11 @@ public class AuthManager : MonoBehaviour
     }
 
     [System.Serializable]
-    public class AlternativeLoginResponse
+    public class LoginResponse
     {
         public bool success;
         public string message;
-        public LoginPayload payload;
-    }
-
-    [System.Serializable]
-    public class LoginPayload
-    {
-        public string token;
-        public User user;
-    }
-
-    [System.Serializable]
-    public class LoginResponse
-    {
-        public string token;
-        public User user;
+        public User payload;
     }
 
     [System.Serializable]
@@ -148,5 +170,7 @@ public class AuthManager : MonoBehaviour
         public int id;
         public string username;
         public string email;
+        public string password;
+        public string createdAt;
     }
 }

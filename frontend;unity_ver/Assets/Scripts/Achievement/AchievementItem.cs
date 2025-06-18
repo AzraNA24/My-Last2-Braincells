@@ -4,22 +4,16 @@ using TMPro;
 
 public class AchievementItem : MonoBehaviour
 {
-    [SerializeField] private Image achievementImage;
-    [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private TextMeshProUGUI descriptionText;
-    [SerializeField] private TextMeshProUGUI unlocked_at;
-    [SerializeField] private GameObject lockedOverlay;
+    [SerializeField] private TMP_Text titleText;
+    [SerializeField] private TMP_Text descriptionText;
 
-    public void Setup( string title, string description, string when, bool unlocked)
+    public void Setup(Achievement achievement, bool isUnlocked, Color unlockedColor, Color lockedColor)
     {
-        titleText.text = title;
-        descriptionText.text = description;
-        unlocked_at.text = when;
+        titleText.text = achievement.name;
+        descriptionText.text = achievement.description;
         
-        // Set locked state
-        lockedOverlay.SetActive(!unlocked);
-        
-        // Set color
-        achievementImage.color = unlocked ? Color.white : Color.gray;
+        // Set color based on unlocked status
+        titleText.color = isUnlocked ? unlockedColor : lockedColor;
+        descriptionText.color = isUnlocked ? unlockedColor : lockedColor;
     }
 }
