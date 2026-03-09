@@ -1,6 +1,6 @@
 # My Last Two Braincells
 <p align="center">
-  <img width="900" height="900" alt="image" src="https://github.com/user-attachments/assets/a09fe486-1e32-401c-a799-09c6c12717b7" />
+  <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/a09fe486-1e32-401c-a799-09c6c12717b7" />
 </p>
 
 
