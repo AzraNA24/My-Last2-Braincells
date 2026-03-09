@@ -1,7 +1,8 @@
 # My Last Two Braincells
 <p align="center">
-  <img src="https://hackmd.io/_uploads/HJS3074Xex.png" alt="Title" width="400"/>
+  <img width="900" height="900" alt="image" src="https://github.com/user-attachments/assets/a09fe486-1e32-401c-a799-09c6c12717b7" />
 </p>
+
 
 <p align="center">
 <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
