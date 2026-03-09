@@ -29,8 +29,12 @@ Use logic, timing, and creativity to overcome challenging platform and logic-bas
 Play anywhere, anytime
 
 ## Sneak Peak
-![Phone](https://hackmd.io/_uploads/HynVxWuXll.png)
-![Demo Aplikasi](screenshot/demo.gif)
+<div align="center">
+  <a href="https://youtu.be/nt4GOCRS7Jk">
+    <img src="https://img.youtube.com/vi/nt4GOCRS7Jk/0.jpg" alt="Trapped Sneak Peek" style="width:100%;">
+  </a>
+  <p><i>Klik gambar untuk menonton trailer di YouTube</i></p>
+</div>
 
 ## Teknologi yang Digunakan
 
